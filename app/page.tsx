@@ -65,7 +65,7 @@ export default function Home() {
     setPhase("idle");
   }
 
-  const overlayText: Record<string, string> = {
+  const overlayText: Partial<Record<Phase, string>> = {
     granted: "ACCESS GRANTED",
     override: "OVERRIDE ACCEPTED",
     decrypt: "DECRYPTING CORE...",
@@ -77,18 +77,18 @@ export default function Home() {
       <style>{`
         @keyframes pulseRed {
           0%,100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.05); opacity: .65; }
+          50% { transform: scale(1.04); opacity: .68; }
         }
 
         @keyframes pulseGreen {
           0%,100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.05); opacity: .7; }
+          50% { transform: scale(1.04); opacity: .72; }
         }
 
         @keyframes flicker {
           0%,100% { opacity: 1; }
-          45% { opacity: .8; }
-          48% { opacity: .25; }
+          45% { opacity: .85; }
+          48% { opacity: .28; }
           52% { opacity: 1; }
         }
 
@@ -101,14 +101,14 @@ export default function Home() {
 
         @keyframes scan {
           0% { transform: translateY(-120%); opacity: 0; }
-          25% { opacity: .7; }
+          25% { opacity: .75; }
           100% { transform: translateY(120%); opacity: 0; }
         }
 
         @keyframes hexRain {
-          0% { transform: translateY(-20px); opacity: .1; }
+          0% { transform: translateY(-18px); opacity: .18; }
           50% { opacity: .75; }
-          100% { transform: translateY(20px); opacity: .1; }
+          100% { transform: translateY(18px); opacity: .18; }
         }
       `}</style>
 
@@ -144,7 +144,9 @@ export default function Home() {
             <h1 style={styles.title}>INBRAAK OP SUPERSYSTEEM</h1>
             <p style={styles.subtitle}>verbinding met centrale supercomputer</p>
 
-            <div style={started ? styles.timerActive : styles.timer}>{formatTime(timeLeft)}</div>
+            <div style={started ? styles.timerActive : styles.timer}>
+              {formatTime(timeLeft)}
+            </div>
 
             <div style={styles.timerLabels}>
               <span>MINUTEN</span>
@@ -237,25 +239,29 @@ export default function Home() {
 
 const styles: Record<string, CSSProperties> = {
   page: {
-    height: "100vh",
+    width: "100%",
+    minHeight: "100vh",
     overflow: "hidden",
     background: "radial-gradient(circle at center, #210000, #020202 55%, #000)",
     color: "#f2f2f2",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
+    padding: 24,
+    boxSizing: "border-box",
     fontFamily: "Consolas, Monaco, monospace",
   },
   pageSuccess: {
-    height: "100vh",
+    width: "100%",
+    minHeight: "100vh",
     overflow: "hidden",
     background: "radial-gradient(circle at center, #00451d, #020905 55%, #000)",
     color: "#f2f2f2",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
+    padding: 24,
+    boxSizing: "border-box",
     fontFamily: "Consolas, Monaco, monospace",
   },
   scanlines: {
@@ -268,13 +274,15 @@ const styles: Record<string, CSSProperties> = {
   },
   shell: {
     position: "relative",
-    width: "min(1240px, calc(100vw - 20px))",
-    height: "min(700px, calc(100vh - 20px))",
+    width: "100%",
+    maxWidth: 1200,
+    height: 760,
+    margin: "0 auto",
     border: "1px solid rgba(255,40,40,.75)",
     borderRadius: 12,
     background: "rgba(0,0,0,.78)",
     boxShadow: "0 0 36px rgba(255,0,0,.22)",
-    padding: "18px 30px",
+    padding: "24px 32px",
     textAlign: "center",
     boxSizing: "border-box",
     overflow: "hidden",
@@ -287,7 +295,7 @@ const styles: Record<string, CSSProperties> = {
     animation: "shake .3s ease-in-out",
   },
   header: {
-    height: 44,
+    height: 42,
     textAlign: "left",
   },
   connection: {
@@ -308,10 +316,10 @@ const styles: Record<string, CSSProperties> = {
   },
   signal: {
     position: "absolute",
-    top: 20,
-    right: 30,
-    width: 74,
-    height: 74,
+    top: 24,
+    right: 32,
+    width: 72,
+    height: 72,
     borderRadius: "50%",
     border: "1px solid rgba(255,50,50,.75)",
     background: "transparent",
@@ -320,10 +328,10 @@ const styles: Record<string, CSSProperties> = {
   },
   signalActive: {
     position: "absolute",
-    top: 20,
-    right: 30,
-    width: 74,
-    height: 74,
+    top: 24,
+    right: 32,
+    width: 72,
+    height: 72,
     borderRadius: "50%",
     border: "1px solid rgba(72,255,118,.85)",
     background: "transparent",
@@ -337,7 +345,7 @@ const styles: Record<string, CSSProperties> = {
     borderRadius: "50%",
     background: "#ff3030",
     boxShadow: "0 0 22px #ff3030",
-    margin: "25px auto",
+    margin: "24px auto",
   },
   signalDotActive: {
     display: "block",
@@ -346,12 +354,12 @@ const styles: Record<string, CSSProperties> = {
     borderRadius: "50%",
     background: "#48ff76",
     boxShadow: "0 0 22px #48ff76",
-    margin: "25px auto",
+    margin: "24px auto",
   },
   title: {
-    margin: "8px 0 4px",
+    margin: "18px 0 6px",
     color: "#ff3030",
-    fontSize: "clamp(30px, 4.2vw, 54px)",
+    fontSize: "clamp(34px, 3.7vw, 48px)",
     letterSpacing: 7,
     lineHeight: 1,
     textShadow: "0 0 18px rgba(255,0,0,.85)",
@@ -364,23 +372,23 @@ const styles: Record<string, CSSProperties> = {
     fontSize: 15,
   },
   timer: {
-    margin: "10px 0 0",
+    margin: "16px 0 0",
     color: "rgba(255,45,45,.55)",
-    fontSize: "clamp(64px, 8vw, 105px)",
-    lineHeight: 0.9,
+    fontSize: "clamp(68px, 7vw, 100px)",
+    lineHeight: 1,
   },
   timerActive: {
-    margin: "10px 0 0",
+    margin: "16px 0 0",
     color: "#ff2424",
-    fontSize: "clamp(64px, 8vw, 105px)",
-    lineHeight: 0.9,
+    fontSize: "clamp(68px, 7vw, 100px)",
+    lineHeight: 1,
     textShadow: "0 0 26px rgba(255,0,0,1)",
     animation: "pulseRed 2s infinite",
   },
   timerLabels: {
     width: 360,
     maxWidth: "70%",
-    margin: "4px auto 14px",
+    margin: "4px auto 20px",
     display: "flex",
     justifyContent: "space-between",
     color: "#ff3030",
@@ -388,17 +396,16 @@ const styles: Record<string, CSSProperties> = {
     letterSpacing: 3,
   },
   grid: {
-    width: "92%",
-    margin: "0 auto",
+    width: "100%",
     display: "grid",
-    gridTemplateColumns: "1fr 245px",
-    gap: 18,
+    gridTemplateColumns: "1fr 250px",
+    gap: 24,
     alignItems: "start",
   },
   authHeader: {
     display: "flex",
     gap: 16,
-    marginBottom: 7,
+    marginBottom: 8,
     color: "rgba(255,255,255,.58)",
     fontSize: 13,
     letterSpacing: 2,
@@ -411,14 +418,14 @@ const styles: Record<string, CSSProperties> = {
     borderRadius: 8,
     background: "rgba(0,35,10,.3)",
     boxShadow: "0 0 18px rgba(0,255,80,.12)",
-    padding: "14px 22px",
+    padding: "18px 24px",
   },
   tokenTitle: {
     color: "#48ff76",
     fontSize: 25,
     letterSpacing: 4,
     textAlign: "left",
-    marginBottom: 10,
+    marginBottom: 12,
   },
   inputRow: {
     display: "flex",
@@ -432,7 +439,7 @@ const styles: Record<string, CSSProperties> = {
   input: {
     flex: 1,
     minWidth: 0,
-    padding: "11px 16px",
+    padding: "12px 16px",
     color: "#48ff76",
     background: "rgba(0,0,0,.82)",
     border: "1px solid #48ff76",
@@ -444,7 +451,7 @@ const styles: Record<string, CSSProperties> = {
   inputDenied: {
     flex: 1,
     minWidth: 0,
-    padding: "11px 16px",
+    padding: "12px 16px",
     color: "#ff5555",
     background: "rgba(0,0,0,.82)",
     border: "1px solid #ff3333",
@@ -454,8 +461,8 @@ const styles: Record<string, CSSProperties> = {
     fontFamily: "Consolas, Monaco, monospace",
   },
   actionButton: {
-    marginTop: 14,
-    padding: "10px 34px",
+    marginTop: 16,
+    padding: "11px 36px",
     color: "#f2f2f2",
     background: "rgba(0,80,20,.65)",
     border: "1px solid #48ff76",
@@ -466,23 +473,21 @@ const styles: Record<string, CSSProperties> = {
     fontFamily: "Consolas, Monaco, monospace",
   },
   deniedText: {
-    margin: "10px 0 0",
+    margin: "12px 0 0",
     color: "#ff5555",
     fontSize: 14,
     letterSpacing: 2,
   },
-rightColumn: {
-  border: "1px solid rgba(255,255,120,.35)",
-  borderRadius: 8,
-  background: "rgba(0,0,0,.36)",
-  padding: "14px 18px",
-  textAlign: "left",
-  alignSelf: "start",
-  height: "fit-content",
-
-  /* Nieuw */
-  marginTop: 24,
-},
+  rightColumn: {
+    border: "1px solid rgba(255,255,120,.35)",
+    borderRadius: 8,
+    background: "rgba(0,0,0,.36)",
+    padding: "16px 18px",
+    textAlign: "left",
+    alignSelf: "start",
+    height: "fit-content",
+    marginTop: 28,
+  },
   boxLabel: {
     marginBottom: 8,
     color: "rgba(255,255,255,.5)",
@@ -490,7 +495,7 @@ rightColumn: {
     fontSize: 11,
   },
   infoLine: {
-    margin: "5px 0",
+    margin: "6px 0",
     color: "#48ff76",
     fontSize: 14,
   },
@@ -586,7 +591,7 @@ rightColumn: {
     lineHeight: 1.45,
   },
   resetButton: {
-    marginTop: 10,
+    marginTop: 12,
     padding: "6px 28px",
     color: "#f4f4f4",
     background: "rgba(0,0,0,.45)",

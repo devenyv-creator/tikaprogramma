@@ -1,4 +1,19 @@
-export const metadata = {
-  title: "TIKA Programma",
-  description: "Hack de supercomputer en red de tijd.",
+import type { Metadata } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "Inbraak op Supersysteem",
+  description: "Voer de override-code in en stop de supercomputer.",
 };
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="nl">
+      <body>{children}</body>
+    </html>
+  );
+}

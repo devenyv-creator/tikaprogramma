@@ -471,15 +471,18 @@ const styles: Record<string, CSSProperties> = {
     fontSize: 14,
     letterSpacing: 2,
   },
-  rightColumn: {
-    border: "1px solid rgba(255,255,120,.35)",
-    borderRadius: 8,
-    background: "rgba(0,0,0,.36)",
-    padding: "14px 18px",
-    textAlign: "left",
-    alignSelf: "start",
-    height: "fit-content",
-  },
+rightColumn: {
+  border: "1px solid rgba(255,255,120,.35)",
+  borderRadius: 8,
+  background: "rgba(0,0,0,.36)",
+  padding: "14px 18px",
+  textAlign: "left",
+  alignSelf: "start",
+  height: "fit-content",
+
+  /* Nieuw */
+  marginTop: 24,
+},
   boxLabel: {
     marginBottom: 8,
     color: "rgba(255,255,255,.5)",

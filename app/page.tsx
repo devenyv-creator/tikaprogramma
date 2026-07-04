@@ -20,19 +20,20 @@ export default function Home() {
   const [started, setStarted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(START_TIME);
   const [phase, setPhase] = useState<Phase>("idle");
+  const [paused, setPaused] = useState(false);
 
   const processing = ["granted", "override", "decrypt", "disable", "blackout"].includes(phase);
   const success = phase === "success";
 
   useEffect(() => {
-    if (!started || success || timeLeft <= 0) return;
+    if (!started || paused || success || timeLeft <= 0) return;
 
     const timer = setInterval(() => {
       setTimeLeft((time) => Math.max(time - 1, 0));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [started, success, timeLeft]);
+ }, [started, paused, success, timeLeft]);
 
   function formatTime(seconds: number) {
     const minutes = Math.floor(seconds / 60);
@@ -40,9 +41,15 @@ export default function Home() {
     return `${String(minutes).padStart(2, "0")}:${String(rest).padStart(2, "0")}`;
   }
 
-  function startTimer() {
+function startTimer() {
+  if (!started) {
     setStarted(true);
+    setPaused(false);
+    return;
   }
+
+  setPaused((p) => !p);
+}
 
   function checkCode() {
     if (processing) return;
@@ -123,12 +130,26 @@ export default function Home() {
       >
         {!success && (
           <button
-            style={started ? styles.signalActive : styles.signal}
+            style={
+  !started
+    ? styles.signal
+    : paused
+    ? styles.signalPaused
+    : styles.signalActive
+}
             onClick={startTimer}
             aria-label="Start aftelling"
             title="Start aftelling"
           >
-            <span style={started ? styles.signalDotActive : styles.signalDot} />
+            <span
+  style={
+    !started
+      ? styles.signalDot
+      : paused
+      ? styles.signalDotPaused
+      : styles.signalDotActive
+  }
+/>
           </button>
         )}
 
@@ -188,7 +209,7 @@ export default function Home() {
 
                 {phase === "denied" && (
                   <button style={styles.resetButton} onClick={reset}>
-                    OPNIEUW
+                    
                   </button>
                 )}
               </section>
@@ -228,7 +249,7 @@ export default function Home() {
               De tijd loopt weer door.
             </p>
             <button style={styles.resetButtonSuccess} onClick={reset}>
-              OPNIEUW
+              OK
             </button>
           </section>
         )}
@@ -308,6 +329,15 @@ const styles: Record<string, CSSProperties> = {
     letterSpacing: 3,
     fontSize: 14,
   },
+  signalDotPaused: {
+  display: "block",
+  width: 22,
+  height: 22,
+  borderRadius: "50%",
+  background: "#ffd000",
+  boxShadow: "0 0 20px #ffd000",
+  margin: "24px auto",
+},
   hint: {
     marginTop: 7,
     color: "rgba(255,255,255,.48)",
@@ -371,6 +401,17 @@ const styles: Record<string, CSSProperties> = {
     letterSpacing: 4,
     fontSize: 15,
   },
+  signalPaused: {
+  position: "absolute",
+  top: 24,
+  right: 32,
+  width: 72,
+  height: 72,
+  borderRadius: "50%",
+  border: "1px solid rgba(255,210,0,.9)",
+  background: "transparent",
+  cursor: "pointer",
+},
   timer: {
     margin: "16px 0 0",
     color: "rgba(255,45,45,.55)",
